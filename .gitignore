@@ -1,0 +1,14 @@
+# Rust build output
+app/target/
+
+# local config / secrets (the app id is baked in - these are only overrides)
+.env
+**/.env
+.oauth-token.json
+
+# packaged extension (rebuild it when publishing)
+extension.zip
+
+# OS junk
+Thumbs.db
+.DS_Store

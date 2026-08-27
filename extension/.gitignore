@@ -1,0 +1,14 @@
+# packaged / signed extension output
+*.zip
+*.crx
+*.pem          # Chrome's private signing key - never commit this
+
+# build tooling, if you add a bundler later
+node_modules/
+dist/
+build/
+.cache/
+
+# OS junk
+.DS_Store
+Thumbs.db

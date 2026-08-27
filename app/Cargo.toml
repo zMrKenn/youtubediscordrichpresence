@@ -1,0 +1,30 @@
+[package]
+name = "youtube-rpc"
+version = "1.0.0"
+edition = "2021"
+description = "Show a Listening to YouTube activity on your Discord profile — native tray app."
+
+[[bin]]
+name = "youtube-rpc"
+path = "src/main.rs"
+
+[dependencies]
+tiny_http = "0.12"
+serde_json = "1"
+tray-icon = "0.19"
+eframe = "0.29"
+image = { version = "0.25", default-features = false, features = ["jpeg", "png"] }
+ureq = "2"
+winreg = "0.52"
+obfstr = "0.4"
+windows = { version = "0.58", features = ["Win32_UI_WindowsAndMessaging", "Win32_Foundation"] }
+
+[build-dependencies]
+ico = "0.3"
+winresource = "0.1"
+
+[profile.release]
+opt-level = "z"
+lto = true
+strip = true
+panic = "abort"

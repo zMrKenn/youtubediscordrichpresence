@@ -1,0 +1,35 @@
+{
+	"manifest_version": 3,
+	"name": "YouTube Presence for Discord",
+	"version": "1.0.0",
+	"description": "Show what you're watching or listening to on YouTube as your Discord status - title, channel, progress, and thumbnail.",
+	"host_permissions": ["http://127.0.0.1/*"],
+	"background": {
+		"service_worker": "background.js"
+	},
+	"action": {
+		"default_popup": "popup.html",
+		"default_title": "YouTube Presence for Discord"
+	},
+	"content_scripts": [
+		{
+			"matches": [
+				"*://www.youtube.com/*",
+				"*://m.youtube.com/*",
+				"*://music.youtube.com/*"
+			],
+			"js": ["inject.js"],
+			"world": "MAIN",
+			"run_at": "document_start"
+		},
+		{
+			"matches": [
+				"*://www.youtube.com/*",
+				"*://m.youtube.com/*",
+				"*://music.youtube.com/*"
+			],
+			"js": ["content.js"],
+			"run_at": "document_idle"
+		}
+	]
+}

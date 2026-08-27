@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<style>
+  body { width: 300px; margin: 0; padding: 16px; background: #0f0f0f; color: #f1f1f1;
+    font-family: "Segoe UI", system-ui, sans-serif; }
+  .hd { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .logo { width: 30px; height: 22px; background: #ff0000; border-radius: 5px; display: flex; align-items: center; justify-content: center; }
+  .logo svg { width: 12px; height: 12px; fill: #fff; margin-left: 1px; }
+  .hd .t { font-size: 14px; font-weight: 600; line-height: 1.2; }
+  .hd .s { font-size: 11px; color: #aaa; }
+  .status { display: flex; align-items: center; gap: 8px; background: #17171b; border-radius: 8px; padding: 10px 12px; margin-bottom: 10px; }
+  .dot { width: 9px; height: 9px; border-radius: 50%; background: #888; flex-shrink: 0; }
+  .dot.up { background: #2ba640; }
+  .dot.down { background: #ff3b3b; }
+  #statusText { font-size: 13px; }
+  #hint { font-size: 12px; color: #9a9ca3; line-height: 1.5; margin-bottom: 12px; min-height: 16px; }
+  .btns { display: flex; flex-direction: column; gap: 8px; }
+  button { font: inherit; font-size: 13px; font-weight: 600; padding: 8px 0; border-radius: 8px; cursor: pointer; border: 0; }
+  .primary { background: #ff2b2b; color: #fff; }
+  .ghost { background: transparent; color: #e4e6ea; border: 1px solid #303036; }
+</style>
+</head>
+<body>
+  <div class="hd">
+    <span class="logo"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
+    <div><div class="t">YouTube Presence</div><div class="s">for Discord</div></div>
+  </div>
+  <div class="status"><span class="dot" id="dot"></span><span id="statusText">Checking...</span></div>
+  <div id="hint"></div>
+  <div class="btns">
+    <button class="primary" id="getApp">Get the desktop app</button>
+    <button class="ghost" id="guide">Setup guide</button>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>
