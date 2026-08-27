@@ -4,8 +4,7 @@ use std::io::{self, Read, Write};
 use obfstr::obfstr;
 use serde_json::{Map, Value};
 
-/// Talks to the Discord desktop app over its local named pipe. That's all the
-/// Rich Presence "API" is under the hood - a length-prefixed JSON stream.
+/// Discord Rich Presence over the local IPC pipe - length-prefixed JSON frames.
 pub struct Discord {
     client_id: String,
     pipe: Option<File>,

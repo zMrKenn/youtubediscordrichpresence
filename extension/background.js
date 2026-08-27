@@ -1,5 +1,4 @@
-// The service worker does the actual talking to the desktop app. Content scripts
-// can be flaky reaching localhost, so they hand the state here and we forward it.
+// forwards state from the content script to the desktop app on localhost
 const ENDPOINT = 'http://127.0.0.1:41414/state';
 
 async function forward(payload) {
@@ -24,7 +23,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
 	return true;
 });
 
-// First install: show the setup page so people know they also need the desktop app.
+// on install, open the setup page
 chrome.runtime.onInstalled.addListener(details => {
 	if (details.reason === 'install') {
 		chrome.tabs.create({ url: chrome.runtime.getURL('welcome.html') });

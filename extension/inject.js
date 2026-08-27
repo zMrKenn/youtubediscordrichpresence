@@ -1,6 +1,5 @@
-// Runs in the page itself (MAIN world) so it can talk to YouTube's player API.
-// Reads whatever is actually playing and hands it to the content script through
-// a CustomEvent - the URL bar lies on Music/playlists, the player API doesn't.
+// runs in the page (MAIN world) to read YouTube's player API and pass the current
+// video to the content script. the URL lies on Music/playlists; the player doesn't.
 (() => {
 	const EMIT_MS = 1000;
 

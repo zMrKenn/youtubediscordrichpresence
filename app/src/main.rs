@@ -66,7 +66,7 @@ fn load_config() -> Config {
     };
 
     Config {
-        // Baked in so the exe runs on its own; a .env still overrides it if present.
+        // baked in so the exe runs standalone; .env still overrides
         client_id: get(obfstr!("DISCORD_APP_ID"))
             .unwrap_or_else(|| obfstr!("1542500318561181777").to_string()),
         activity_type: get(obfstr!("ACTIVITY_TYPE")).and_then(|s| s.parse().ok()).unwrap_or(2),
@@ -88,8 +88,7 @@ fn config_dirs() -> Vec<std::path::PathBuf> {
     dirs
 }
 
-// What the extension sends over. Parsed by hand instead of with derive so the
-// JSON field names don't end up sitting in the binary as plain text.
+// what the extension sends; parsed by hand so field names stay out of the binary
 #[derive(Default, Clone)]
 struct Incoming {
     clear: bool,
@@ -139,7 +138,7 @@ enum Msg {
     SetSmallIcon(Option<String>),
 }
 
-// Whatever the desktop app currently knows about the song, shared with the UI.
+// current song state, shared with the UI
 #[derive(Clone, Default)]
 struct UiSnapshot {
     connected: bool,
@@ -242,7 +241,7 @@ fn run_http(tx: Sender<Msg>, ui: Arc<Mutex<UiSnapshot>>, port: u16, reveal_flag:
         let method = request.method().clone();
         let url = request.url().to_string();
 
-        // Health check so the extension popup can tell whether the app is running.
+        // health check for the popup
         if url.as_str() == obfstr!("/ping") {
             let mut resp = tiny_http::Response::from_string(obfstr!("ok").to_string());
             add_cors(&mut resp);
@@ -250,7 +249,7 @@ fn run_http(tx: Sender<Msg>, ui: Arc<Mutex<UiSnapshot>>, port: u16, reveal_flag:
             continue;
         }
 
-        // A second launch pings this to bring the running window back.
+        // a second launch pings this to reopen the window
         if url.as_str() == obfstr!("/reveal") {
             reveal_flag.store(true, Ordering::SeqCst);
             let mut resp = tiny_http::Response::from_string(obfstr!("ok").to_string());
@@ -476,7 +475,7 @@ fn message_box(title: &str, text: &str) {
     }
 }
 
-// Draws the little red play-button icon at whatever size we need.
+// the red play-button icon at a given size
 fn icon_rgba(size: u32) -> Vec<u8> {
     let s = size as f32;
     let k = s / 32.0;
@@ -530,7 +529,7 @@ fn in_triangle(px: f32, py: f32, ax: f32, ay: f32, bx: f32, by: f32, cx: f32, cy
 }
 
 fn fetch_image(url: &str) -> Option<egui::ColorImage> {
-    // mqdefault is a clean 16:9 frame (no letterboxing).
+    // mqdefault is a clean 16:9 frame
     let url = url.replace(obfstr!("hqdefault"), obfstr!("mqdefault"));
     let resp = ureq::get(&url).call().ok()?;
     let mut bytes = Vec::new();
@@ -543,8 +542,7 @@ fn fetch_image(url: &str) -> Option<egui::ColorImage> {
 fn main() {
     let cfg = load_config();
 
-    // Only one instance should own the tray. If another is already up, poke it
-    // to show its window and quietly bow out.
+    // one instance only; if it's already up, tell it to show and exit
     if instance_running(cfg.port) {
         return;
     }
@@ -600,9 +598,8 @@ fn run_app(cfg: Config, tx: Sender<Msg>, ui: Arc<Mutex<UiSnapshot>>, startup: bo
     );
 }
 
-// eframe stops calling update() while the window is hidden, so the tray lives
-// on its own thread. "Open" forces the native window back with a direct Win32
-// call (a queued egui command alone won't wake a hidden window).
+// eframe stops calling update() while hidden, so the tray runs on its own thread.
+// Open forces the window back via Win32 - a queued egui command won't wake it.
 fn spawn_tray_thread(
     ctx: egui::Context,
     open_id: tray_icon::menu::MenuId,
@@ -625,7 +622,7 @@ fn spawn_tray_thread(
                     reveal(&ctx);
                 }
             }
-            // A second launch of the exe sets this to raise the existing window.
+            // set by a second launch to raise the window
             if reveal_flag.swap(false, Ordering::SeqCst) {
                 reveal(&ctx);
             }
@@ -768,7 +765,7 @@ impl eframe::App for App {
     }
 
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
-        // Clicking X drops the window to the tray; the app keeps running.
+        // X drops to the tray, app keeps running
         if ctx.input(|i| i.viewport().close_requested()) {
             ctx.send_viewport_cmd(egui::ViewportCommand::CancelClose);
             ctx.send_viewport_cmd(egui::ViewportCommand::Visible(false));

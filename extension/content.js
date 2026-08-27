@@ -1,7 +1,5 @@
-// Picks up what inject.js reads from the player, tidies it up (title, channel,
-// album, progress) and forwards it to the background worker every couple seconds.
-// Only sends when something actually changed, plus a heartbeat so the app knows
-// we're still here.
+// cleans up the player data from inject.js and forwards it to the background worker.
+// sends only on change, plus a heartbeat.
 (() => {
 	const POLL_MS = 2000;
 	const HEARTBEAT_MS = 12000;
@@ -30,7 +28,7 @@
 		if (dead) return;
 		dead = true;
 		if (pollHandle) clearInterval(pollHandle);
-		// Not an error - just the old script bowing out after an extension reload.
+		// not an error - old script stopping after an extension reload
 		console.log(`[yt-rpc] stopped: ${reason}. Refresh this tab to reconnect.`);
 	}
 

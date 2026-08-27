@@ -1,5 +1,4 @@
-// The popup: quick status (is the desktop app up?) plus a couple of links.
-// Points at the latest release's exe on GitHub.
+// popup: shows if the app is running, plus download/setup links
 const PROJECT_URL = 'https://github.com/zMrKenn/youtubediscordrichpresence/releases/latest/download/youtube-rpc.exe';
 const PORT = 41414;
 

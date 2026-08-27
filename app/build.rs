@@ -18,7 +18,7 @@ fn in_triangle(px: f32, py: f32, ax: f32, ay: f32, bx: f32, by: f32, cx: f32, cy
     !(has_neg && has_pos)
 }
 
-// The app icon: red rounded square, white play triangle. Same thing the tray uses.
+// the app icon (same red play button as the tray)
 fn icon_rgba(size: u32) -> Vec<u8> {
     let s = size as f32;
     let k = s / 32.0;
@@ -65,7 +65,7 @@ fn icon_rgba(size: u32) -> Vec<u8> {
 fn main() {
     println!("cargo:rerun-if-changed=build.rs");
 
-    // Generate a multi-size .ico and embed it as the exe's file icon (Windows).
+    // build a multi-size .ico and embed it as the exe icon
     #[cfg(windows)]
     {
         let out_dir = env::var("OUT_DIR").unwrap();
