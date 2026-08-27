@@ -1,6 +1,6 @@
 // The popup: quick status (is the desktop app up?) plus a couple of links.
-// Change PROJECT_URL to wherever you host the desktop app download.
-const PROJECT_URL = 'https://keen.pub';
+// Points at the latest release's exe on GitHub.
+const PROJECT_URL = 'https://github.com/zMrKenn/youtubediscordrichpresence/releases/latest/download/youtube-rpc.exe';
 const PORT = 41414;
 
 function setStatus(state) {
