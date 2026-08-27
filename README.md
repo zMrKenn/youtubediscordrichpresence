@@ -23,8 +23,9 @@
 
 ## ▸ what it is
 
-Two small pieces that put the video or song you're playing on YouTube straight onto your
-Discord profile — title, channel, a live progress bar, the thumbnail, and buttons.
+YouTube never showed up on my Discord profile the way Spotify does, so I built this. It's a
+browser extension plus a small desktop app. While you've got something playing on YouTube it
+turns into your Discord status, thumbnail and all.
 
 ```text
 ◉  browser extension  -  reads the real player (accurate on Music, playlists, radio)
@@ -44,9 +45,9 @@ Discord profile — title, channel, a live progress bar, the thumbnail, and butt
  (reads the player)  :41414     (tray + window)      IPC             (your profile)
 ```
 
-The extension pulls the current video from YouTube's own player and POSTs it to
-`127.0.0.1`. The app picks it up and speaks Discord's local IPC directly. Everything
-stays on your machine — no accounts, no trackers, nothing leaves `localhost`.
+The extension grabs the current video from YouTube's own player and sends it to
+`127.0.0.1`. The desktop app picks it up and talks to Discord over its local connection.
+None of it leaves your machine, and there's no account or bot anywhere.
 
 ---
 
