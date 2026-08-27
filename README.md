@@ -12,6 +12,11 @@
 <img src="https://img.shields.io/badge/Discord%20RPC-0D1117?style=for-the-badge&logo=discord&logoColor=5865F2" alt="Discord"/>
 <img src="https://img.shields.io/badge/license-MIT-0D1117?style=for-the-badge&labelColor=0D1117&color=22C55E" alt="License"/>
 
+<br/><br/>
+
+<a href="https://github.com/zMrKenn/youtubediscordrichpresence/releases/latest"><img src="https://img.shields.io/badge/Download%20the%20app-.exe-0D1117?style=for-the-badge&logo=github&logoColor=A78BFA&labelColor=0D1117&color=A78BFA" alt="Download the app"/></a>
+<a href="https://chromewebstore.google.com/detail/dmilhomifdpkfmeelmcnkdphhclcjagn"><img src="https://img.shields.io/badge/Chrome%20Web%20Store-in%20review-0D1117?style=for-the-badge&logo=googlechrome&logoColor=A78BFA&labelColor=0D1117&color=F59E0B" alt="Chrome Web Store"/></a>
+
 </div>
 
 ---
@@ -47,16 +52,18 @@ stays on your machine — no accounts, no trackers, nothing leaves `localhost`.
 
 ## ▸ install
 
-```bash
-# 1 - the desktop app
-cd app && cargo build --release     # -> app/target/release/youtube-rpc.exe  (just run it)
+**1. Get the browser extension**
 
-# 2 - the extension  (chrome / brave / edge)
-#   chrome://extensions  ->  Developer mode  ->  Load unpacked  ->  pick  ./extension
-```
+- Chrome Web Store: **[install here](https://chromewebstore.google.com/detail/dmilhomifdpkfmeelmcnkdphhclcjagn)** — *currently in review, coming soon*
+- or load it unpacked: `chrome://extensions` → Developer mode → **Load unpacked** → pick `./extension`
 
-Run the exe (red play icon lands in the tray), load the extension, play something on
-YouTube. Right-click the tray icon → **Start with Windows** to launch it at login.
+**2. Get the desktop app**
+
+- **[Download youtube-rpc.exe](https://github.com/zMrKenn/youtubediscordrichpresence/releases/latest/download/youtube-rpc.exe)** and run it — a red play icon lands in your tray
+- or build it from source: `cd app && cargo build --release`
+
+Then play something on YouTube. Right-click the tray icon → **Start with Windows** to launch
+it at login.
 
 ---
 
