@@ -5,25 +5,17 @@ use std::fs;
 #[cfg(windows)]
 use std::path::Path;
 
-fn sign(px: f32, py: f32, ax: f32, ay: f32, bx: f32, by: f32) -> f32 {
-    (px - bx) * (ay - by) - (ax - bx) * (py - by)
-}
-
-fn in_triangle(px: f32, py: f32, ax: f32, ay: f32, bx: f32, by: f32, cx: f32, cy: f32) -> bool {
-    let d1 = sign(px, py, ax, ay, bx, by);
-    let d2 = sign(px, py, bx, by, cx, cy);
-    let d3 = sign(px, py, cx, cy, ax, ay);
-    let has_neg = d1 < 0.0 || d2 < 0.0 || d3 < 0.0;
-    let has_pos = d1 > 0.0 || d2 > 0.0 || d3 > 0.0;
-    !(has_neg && has_pos)
-}
-
-// the app icon (same red play button as the tray)
+// the app mark: violet rounded square with three white "now playing" bars
 fn icon_rgba(size: u32) -> Vec<u8> {
     let s = size as f32;
     let k = s / 32.0;
-    let (ax, ay, bx, by, cx, cy) = (12.0 * k, 9.0 * k, 12.0 * k, 23.0 * k, 23.0 * k, 16.0 * k);
-    let r = 6.0 * k;
+    let r = 7.0 * k;
+    let bottom = 23.0 * k;
+    let bars = [
+        (7.0 * k, 12.0 * k, 13.0 * k),
+        (13.5 * k, 18.5 * k, 8.0 * k),
+        (20.0 * k, 25.0 * k, 12.0 * k),
+    ];
     let mut rgba = vec![0u8; (size * size * 4) as usize];
     for y in 0..size {
         for x in 0..size {
@@ -46,15 +38,16 @@ fn icon_rgba(size: u32) -> Vec<u8> {
             if transparent {
                 continue;
             }
-            if in_triangle(fx, fy, ax, ay, bx, by, cx, cy) {
+            let in_bar = bars.iter().any(|&(x0, x1, ytop)| fx >= x0 && fx < x1 && fy >= ytop && fy < bottom);
+            if in_bar {
                 rgba[idx] = 255;
                 rgba[idx + 1] = 255;
                 rgba[idx + 2] = 255;
                 rgba[idx + 3] = 255;
             } else {
-                rgba[idx] = 255;
-                rgba[idx + 1] = 0;
-                rgba[idx + 2] = 0;
+                rgba[idx] = 0x8b;
+                rgba[idx + 1] = 0x5c;
+                rgba[idx + 2] = 0xf6;
                 rgba[idx + 3] = 255;
             }
         }

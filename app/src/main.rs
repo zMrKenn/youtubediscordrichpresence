@@ -20,7 +20,7 @@ const STALE_SECS: u64 = 30;
 const BG: Color32 = Color32::from_rgb(0x0f, 0x0f, 0x0f);
 const CARD: Color32 = Color32::from_rgb(0x18, 0x18, 0x18);
 const CARD2: Color32 = Color32::from_rgb(0x21, 0x21, 0x21);
-const RED: Color32 = Color32::from_rgb(0xff, 0x00, 0x00);
+const ACCENT: Color32 = Color32::from_rgb(0x8b, 0x5c, 0xf6);
 const TEXT: Color32 = Color32::from_rgb(0xf1, 0xf1, 0xf1);
 const MUTED: Color32 = Color32::from_rgb(0xaa, 0xaa, 0xaa);
 const GREEN: Color32 = Color32::from_rgb(0x2b, 0xa6, 0x40);
@@ -475,12 +475,17 @@ fn message_box(title: &str, text: &str) {
     }
 }
 
-// the red play-button icon at a given size
+// the app mark: violet rounded square with three white "now playing" bars
 fn icon_rgba(size: u32) -> Vec<u8> {
     let s = size as f32;
     let k = s / 32.0;
-    let (ax, ay, bx, by, cx, cy) = (12.0 * k, 9.0 * k, 12.0 * k, 23.0 * k, 23.0 * k, 16.0 * k);
-    let r = 6.0 * k;
+    let r = 7.0 * k;
+    let bottom = 23.0 * k;
+    let bars = [
+        (7.0 * k, 12.0 * k, 13.0 * k),
+        (13.5 * k, 18.5 * k, 8.0 * k),
+        (20.0 * k, 25.0 * k, 12.0 * k),
+    ];
     let mut rgba = vec![0u8; (size * size * 4) as usize];
     for y in 0..size {
         for x in 0..size {
@@ -503,29 +508,21 @@ fn icon_rgba(size: u32) -> Vec<u8> {
             if transparent {
                 continue;
             }
-            if in_triangle(fx, fy, ax, ay, bx, by, cx, cy) {
+            let in_bar = bars.iter().any(|&(x0, x1, ytop)| fx >= x0 && fx < x1 && fy >= ytop && fy < bottom);
+            if in_bar {
                 rgba[idx] = 255;
                 rgba[idx + 1] = 255;
                 rgba[idx + 2] = 255;
                 rgba[idx + 3] = 255;
             } else {
-                rgba[idx] = 255;
-                rgba[idx + 1] = 0;
-                rgba[idx + 2] = 0;
+                rgba[idx] = 0x8b;
+                rgba[idx + 1] = 0x5c;
+                rgba[idx + 2] = 0xf6;
                 rgba[idx + 3] = 255;
             }
         }
     }
     rgba
-}
-
-fn in_triangle(px: f32, py: f32, ax: f32, ay: f32, bx: f32, by: f32, cx: f32, cy: f32) -> bool {
-    let d1 = (px - bx) * (ay - by) - (ax - bx) * (py - by);
-    let d2 = (px - cx) * (by - cy) - (bx - cx) * (py - cy);
-    let d3 = (px - ax) * (cy - ay) - (cx - ax) * (py - ay);
-    let has_neg = d1 < 0.0 || d2 < 0.0 || d3 < 0.0;
-    let has_pos = d1 > 0.0 || d2 > 0.0 || d3 > 0.0;
-    !(has_neg && has_pos)
 }
 
 fn fetch_image(url: &str) -> Option<egui::ColorImage> {
@@ -799,16 +796,19 @@ impl eframe::App for App {
 }
 
 fn draw_logo(ui: &mut egui::Ui) {
-    let (rect, _) = ui.allocate_exact_size(egui::vec2(34.0, 24.0), Sense::hover());
+    let (rect, _) = ui.allocate_exact_size(egui::vec2(30.0, 30.0), Sense::hover());
     let p = ui.painter();
-    p.rect_filled(rect, Rounding::same(6.0), RED);
-    let c = rect.center();
-    let tri = vec![
-        egui::pos2(c.x - 4.0, c.y - 6.0),
-        egui::pos2(c.x - 4.0, c.y + 6.0),
-        egui::pos2(c.x + 7.0, c.y),
-    ];
-    p.add(egui::Shape::convex_polygon(tri, Color32::WHITE, Stroke::NONE));
+    p.rect_filled(rect, Rounding::same(7.0), ACCENT);
+    let base = rect.min;
+    let bar = |x: f32, ytop: f32| {
+        egui::Rect::from_min_max(
+            egui::pos2(base.x + x, base.y + ytop),
+            egui::pos2(base.x + x + 4.0, base.y + 22.0),
+        )
+    };
+    p.rect_filled(bar(6.0, 12.0), Rounding::same(1.5), Color32::WHITE);
+    p.rect_filled(bar(13.0, 7.0), Rounding::same(1.5), Color32::WHITE);
+    p.rect_filled(bar(20.0, 11.0), Rounding::same(1.5), Color32::WHITE);
 }
 
 fn draw_header(ui: &mut egui::Ui, snap: &UiSnapshot) {
@@ -926,12 +926,12 @@ fn draw_now_playing(
                             let frac = if snap.duration > 0.0 { (elapsed / snap.duration).clamp(0.0, 1.0) } else { 0.0 };
                             let mut fill = rect;
                             fill.set_width(rect.width() * frac as f32);
-                            ui.painter().rect_filled(fill, Rounding::same(2.0), RED);
+                            ui.painter().rect_filled(fill, Rounding::same(2.0), ACCENT);
                             ui.add_space(6.0);
                             ui.label(egui::RichText::new(fmt_time(snap.duration)).size(11.0).color(MUTED));
                         });
                     } else {
-                        ui.label(egui::RichText::new(obfstr!("Live")).size(12.0).color(RED).strong());
+                        ui.label(egui::RichText::new(obfstr!("Live")).size(12.0).color(ACCENT).strong());
                     }
                 });
         });
@@ -1004,7 +1004,7 @@ fn seg_button(ui: &mut egui::Ui, label: &str, active: bool) -> bool {
         .size(12.0)
         .color(if active { Color32::WHITE } else { MUTED });
     let btn = egui::Button::new(text)
-        .fill(if active { RED } else { Color32::TRANSPARENT })
+        .fill(if active { ACCENT } else { Color32::TRANSPARENT })
         .rounding(Rounding::same(6.0))
         .stroke(Stroke::NONE);
     ui.add(btn).clicked()
@@ -1013,7 +1013,7 @@ fn seg_button(ui: &mut egui::Ui, label: &str, active: bool) -> bool {
 fn toggle(ui: &mut egui::Ui, on: bool) -> egui::Response {
     let (rect, resp) = ui.allocate_exact_size(egui::vec2(40.0, 22.0), Sense::click());
     let p = ui.painter();
-    p.rect_filled(rect, Rounding::same(11.0), if on { RED } else { TRACK });
+    p.rect_filled(rect, Rounding::same(11.0), if on { ACCENT } else { TRACK });
     let knob_x = if on { rect.right() - 11.0 } else { rect.left() + 11.0 };
     p.circle_filled(egui::pos2(knob_x, rect.center().y), 8.0, Color32::WHITE);
     resp
