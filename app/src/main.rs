@@ -551,6 +551,7 @@ fn main() {
 
     let ui = Arc::new(Mutex::new(UiSnapshot::default()));
     let reveal_flag = Arc::new(AtomicBool::new(false));
+    let visible = Arc::new(AtomicBool::new(!startup));
     let (tx, rx) = mpsc::channel::<Msg>();
 
     {
@@ -566,14 +567,14 @@ fn main() {
         thread::spawn(move || run_discord(worker_cfg, rx, ui));
     }
 
-    run_app(cfg, tx, ui, startup, reveal_flag);
+    run_app(cfg, tx, ui, startup, reveal_flag, visible);
 }
 
 fn instance_running(port: u16) -> bool {
     ureq::post(&format!("http://127.0.0.1:{port}/reveal")).call().is_ok()
 }
 
-fn run_app(cfg: Config, tx: Sender<Msg>, ui: Arc<Mutex<UiSnapshot>>, startup: bool, reveal_flag: Arc<AtomicBool>) {
+fn run_app(cfg: Config, tx: Sender<Msg>, ui: Arc<Mutex<UiSnapshot>>, startup: bool, reveal_flag: Arc<AtomicBool>, visible: Arc<AtomicBool>) {
     let icon = egui::IconData { rgba: icon_rgba(32), width: 32, height: 32 };
     let mut opts = eframe::NativeOptions::default();
     opts.viewport = egui::ViewportBuilder::default()
@@ -589,8 +590,8 @@ fn run_app(cfg: Config, tx: Sender<Msg>, ui: Arc<Mutex<UiSnapshot>>, startup: bo
         Box::new(move |cc| {
             setup_style(&cc.egui_ctx);
             let (tray, open_id, quit_id) = build_tray();
-            spawn_tray_thread(cc.egui_ctx.clone(), open_id, quit_id, reveal_flag);
-            Ok(Box::new(App::new(ui, tx, cfg, tray)))
+            spawn_tray_thread(cc.egui_ctx.clone(), open_id, quit_id, reveal_flag, visible.clone());
+            Ok(Box::new(App::new(ui, tx, cfg, tray, visible)))
         }),
     );
 }
@@ -602,6 +603,7 @@ fn spawn_tray_thread(
     open_id: tray_icon::menu::MenuId,
     quit_id: tray_icon::menu::MenuId,
     reveal_flag: Arc<AtomicBool>,
+    visible: Arc<AtomicBool>,
 ) {
     thread::spawn(move || {
         let menu_rx = tray_icon::menu::MenuEvent::receiver();
@@ -611,16 +613,19 @@ fn spawn_tray_thread(
                 if ev.id == quit_id {
                     std::process::exit(0);
                 } else if ev.id == open_id {
+                    visible.store(true, Ordering::SeqCst);
                     reveal(&ctx);
                 }
             }
             while let Ok(ev) = tray_rx.try_recv() {
                 if let tray_icon::TrayIconEvent::DoubleClick { .. } = ev {
+                    visible.store(true, Ordering::SeqCst);
                     reveal(&ctx);
                 }
             }
             // set by a second launch to raise the window
             if reveal_flag.swap(false, Ordering::SeqCst) {
+                visible.store(true, Ordering::SeqCst);
                 reveal(&ctx);
             }
         }
@@ -687,10 +692,11 @@ struct App {
     anchor_key: String,
     anchor_ct: f64,
     anchor_at: Instant,
+    visible: Arc<AtomicBool>,
 }
 
 impl App {
-    fn new(ui: Arc<Mutex<UiSnapshot>>, tx: Sender<Msg>, cfg: Config, tray: tray_icon::TrayIcon) -> Self {
+    fn new(ui: Arc<Mutex<UiSnapshot>>, tx: Sender<Msg>, cfg: Config, tray: tray_icon::TrayIcon, visible: Arc<AtomicBool>) -> Self {
         App {
             ui,
             tx,
@@ -704,6 +710,7 @@ impl App {
             anchor_key: String::new(),
             anchor_ct: 0.0,
             anchor_at: Instant::now(),
+            visible,
         }
     }
 
@@ -766,6 +773,7 @@ impl eframe::App for App {
         if ctx.input(|i| i.viewport().close_requested()) {
             ctx.send_viewport_cmd(egui::ViewportCommand::CancelClose);
             ctx.send_viewport_cmd(egui::ViewportCommand::Visible(false));
+            self.visible.store(false, Ordering::SeqCst);
             #[cfg(windows)]
             if !get_flag(obfstr!("bgNotice")) {
                 set_flag(obfstr!("bgNotice"), true);
@@ -791,7 +799,11 @@ impl eframe::App for App {
             draw_footer(ui, self.port);
         });
 
-        ctx.request_repaint_after(Duration::from_millis(500));
+        // only repaint while the window is visible - idle in the tray, no CPU spin
+        if self.visible.load(Ordering::SeqCst) {
+            let dt = if snap.has_song && snap.playing && !snap.live { 500 } else { 1200 };
+            ctx.request_repaint_after(Duration::from_millis(dt));
+        }
     }
 }
 
