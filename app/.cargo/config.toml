@@ -1,0 +1,4 @@
+# Statically link the MSVC C runtime so the exe has no VC++ redist dependency
+# and runs on a clean Windows install as-is.
+[build]
+rustflags = ["-C", "target-feature=+crt-static"]
