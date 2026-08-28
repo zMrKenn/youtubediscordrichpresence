@@ -12,9 +12,9 @@ use windows::core::PCWSTR;
 use windows::Win32::Foundation::{COLORREF, HWND, LPARAM, LRESULT, POINT, RECT, SIZE, WPARAM};
 use windows::Win32::Graphics::Dwm::{DwmSetWindowAttribute, DWMWA_USE_IMMERSIVE_DARK_MODE};
 use windows::Win32::Graphics::Gdi::{
-    AlphaBlend, BeginPaint, BitBlt, CreateCompatibleBitmap, CreateCompatibleDC, CreateDIBSection,
-    CreateFontW, CreateSolidBrush, DeleteDC, DeleteObject, EndPaint, FillRect, GetDC,
-    GetTextExtentPoint32W, InvalidateRect, ReleaseDC, SelectObject, SetBkMode, SetTextColor,
+    AlphaBlend, BeginPaint, BitBlt, CreateBitmap, CreateCompatibleBitmap, CreateCompatibleDC,
+    CreateDIBSection, CreateFontW, CreateSolidBrush, DeleteDC, DeleteObject, EndPaint, FillRect,
+    GetDC, GetTextExtentPoint32W, InvalidateRect, ReleaseDC, SelectObject, SetBkMode, SetTextColor,
     StretchBlt, TextOutW, AC_SRC_ALPHA, AC_SRC_OVER, BI_RGB, BITMAPINFO, BITMAPINFOHEADER,
     BLENDFUNCTION, DEFAULT_CHARSET, DIB_RGB_COLORS, FW_BOLD, FW_NORMAL, HBITMAP, HBRUSH, HDC,
     HFONT, OUT_DEFAULT_PRECIS, PAINTSTRUCT, SRCCOPY, TRANSPARENT,
@@ -22,13 +22,14 @@ use windows::Win32::Graphics::Gdi::{
 use windows::Win32::System::LibraryLoader::GetModuleHandleW;
 use windows::Win32::UI::Input::KeyboardAndMouse::{TrackMouseEvent, TME_LEAVE, TRACKMOUSEEVENT};
 use windows::Win32::UI::WindowsAndMessaging::{
-    CreateWindowExW, DefWindowProcW, DestroyWindow, DispatchMessageW, GetClientRect, GetMessageW,
-    GetWindowLongPtrW, IsWindowVisible, KillTimer, LoadCursorW, LoadIconW, PostMessageW,
-    PostQuitMessage, RegisterClassW, SetCursor, SetForegroundWindow, SetTimer, SetWindowLongPtrW,
-    ShowWindow, TranslateMessage, CS_HREDRAW, CS_VREDRAW, GWLP_USERDATA, IDC_ARROW, IDC_HAND,
-    MINMAXINFO, MSG, SW_HIDE, SW_SHOW, WM_CLOSE, WM_CREATE, WM_DESTROY, WM_ERASEBKGND,
-    WM_GETMINMAXINFO, WM_LBUTTONDOWN, WM_MOUSEMOVE, WM_PAINT, WM_SETCURSOR, WM_TIMER, WM_USER,
-    WNDCLASSW, WS_EX_APPWINDOW, WS_EX_TOOLWINDOW, WS_OVERLAPPEDWINDOW,
+    CreateIconIndirect, CreateWindowExW, DefWindowProcW, DestroyWindow, DispatchMessageW,
+    GetClientRect, GetMessageW, GetWindowLongPtrW, IsWindowVisible, KillTimer, LoadCursorW,
+    LoadIconW, PostMessageW, PostQuitMessage, RegisterClassW, SetCursor, SetForegroundWindow,
+    SetTimer, SetWindowLongPtrW, ShowWindow, TranslateMessage, CS_HREDRAW, CS_VREDRAW,
+    GWLP_USERDATA, HICON, ICONINFO, IDC_ARROW, IDC_HAND, MINMAXINFO, MSG, SW_HIDE, SW_SHOW,
+    WM_CLOSE, WM_CREATE, WM_DESTROY, WM_ERASEBKGND, WM_GETMINMAXINFO, WM_LBUTTONDOWN,
+    WM_MOUSEMOVE, WM_PAINT, WM_SETCURSOR, WM_TIMER, WM_USER, WNDCLASSW, WS_EX_APPWINDOW,
+    WS_EX_TOOLWINDOW, WS_OVERLAPPEDWINDOW,
 };
 
 const WM_MOUSELEAVE: u32 = 0x02A3;
@@ -60,6 +61,54 @@ const fn rgb(r: u8, g: u8, b: u8) -> COLORREF {
 
 fn wide(s: &str) -> Vec<u16> {
     s.encode_utf16().chain(std::iter::once(0)).collect()
+}
+
+// Build an HICON from raw RGBA bytes so the window title bar and taskbar show
+// the app's own violet mark instead of Windows' default icon.
+unsafe fn make_hicon(rgba: &[u8], size: i32) -> Option<HICON> {
+    let bmi = BITMAPINFO {
+        bmiHeader: BITMAPINFOHEADER {
+            biSize: size_of::<BITMAPINFOHEADER>() as u32,
+            biWidth: size,
+            biHeight: -size,
+            biPlanes: 1,
+            biBitCount: 32,
+            biCompression: BI_RGB.0,
+            ..Default::default()
+        },
+        ..Default::default()
+    };
+    let screen = GetDC(None);
+    let mut bits: *mut core::ffi::c_void = std::ptr::null_mut();
+    let color_bmp = CreateDIBSection(screen, &bmi, DIB_RGB_COLORS, &mut bits, None, 0).ok()?;
+    let _ = ReleaseDC(None, screen);
+    if bits.is_null() {
+        let _ = DeleteObject(color_bmp);
+        return None;
+    }
+    let dst = std::slice::from_raw_parts_mut(bits as *mut u8, (size * size * 4) as usize);
+    for i in 0..(size * size) as usize {
+        dst[i * 4] = rgba[i * 4 + 2];       // B
+        dst[i * 4 + 1] = rgba[i * 4 + 1];   // G
+        dst[i * 4 + 2] = rgba[i * 4];       // R
+        dst[i * 4 + 3] = rgba[i * 4 + 3];   // A
+    }
+    let mask_bmp = CreateBitmap(size, size, 1, 1, None);
+    if mask_bmp.is_invalid() {
+        let _ = DeleteObject(color_bmp);
+        return None;
+    }
+    let info = ICONINFO {
+        fIcon: windows::Win32::Foundation::BOOL(1),
+        xHotspot: 0,
+        yHotspot: 0,
+        hbmMask: mask_bmp,
+        hbmColor: color_bmp,
+    };
+    let hicon = CreateIconIndirect(&info).ok();
+    let _ = DeleteObject(color_bmp);
+    let _ = DeleteObject(mask_bmp);
+    hicon
 }
 
 struct Hit {
@@ -107,11 +156,14 @@ pub fn run(
     let class = wide(obfstr!("YouTubeRPCWindow"));
     unsafe {
         let hinst = GetModuleHandleW(None).unwrap();
+        let app_icon = make_hicon(&icon_rgba(32), 32).unwrap_or_else(|| {
+            LoadIconW(None, PCWSTR::null()).unwrap_or_default()
+        });
         let wc = WNDCLASSW {
             style: CS_HREDRAW | CS_VREDRAW,
             lpfnWndProc: Some(wnd_proc),
             hInstance: hinst.into(),
-            hIcon: LoadIconW(None, PCWSTR::null()).unwrap_or_default(),
+            hIcon: app_icon,
             hCursor: LoadCursorW(None, IDC_ARROW).unwrap_or_default(),
             lpszClassName: PCWSTR(class.as_ptr()),
             ..Default::default()
