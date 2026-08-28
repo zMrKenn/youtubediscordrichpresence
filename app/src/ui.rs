@@ -837,10 +837,6 @@ unsafe fn draw_ui(hdc: HDC, client: &RECT, st: &mut WindowState, snap: &UiSnapsh
         }
         // round the top corners so the thumbnail matches the card's shape
         punch_corners(hdc, &thumb, 12, C_BG, [true, true, false, false]);
-        if !snap.live {
-            let dur = crate::fmt_time(snap.duration);
-            draw_text(hdc, font_small, C_TEXT, thumb.right - 54, thumb.bottom - 22, &dur);
-        }
 
         let mut ty = thumb.bottom + 12;
         for line in &title_lines {
