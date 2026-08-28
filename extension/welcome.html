@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>YouTube Presence for Discord - Setup</title>
 <style>
-  :root { --red: #ff2b2b; }
+  :root { --red: #8b5cf6; }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
     font-family: "Segoe UI", system-ui, sans-serif;
@@ -13,8 +13,8 @@
     color: #f1f1f1; min-height: 100vh; display: flex; justify-content: center; padding: 60px 20px;
   }
   .wrap { width: 100%; max-width: 620px; }
-  .logo { width: 60px; height: 44px; background: #ff0000; border-radius: 11px; display: flex; align-items: center; justify-content: center; margin-bottom: 22px; }
-  .logo svg { width: 26px; height: 26px; fill: #fff; margin-left: 2px; }
+  .logo { margin-bottom: 22px; }
+  .logo svg { width: 58px; height: 58px; filter: drop-shadow(0 10px 22px rgba(124,58,237,.35)); }
   h1 { font-size: 34px; font-weight: 800; letter-spacing: -.01em; margin-bottom: 10px; }
   .lead { font-size: 17px; color: #b7b9c0; line-height: 1.55; margin-bottom: 34px; }
   .lead b { color: #fff; font-weight: 600; }
@@ -24,7 +24,7 @@
   .step h3 { font-size: 16px; font-weight: 600; margin-bottom: 5px; }
   .step p { font-size: 14px; color: #aeb0b7; line-height: 1.5; }
   .btn { display: inline-block; margin-top: 12px; background: var(--red); color: #fff; text-decoration: none; font-size: 14px; font-weight: 600; padding: 9px 18px; border-radius: 8px; }
-  .btn:hover { background: #ff4646; }
+  .btn:hover { background: #7c3aed; }
 
   .notes { margin-top: 30px; padding-top: 22px; border-top: 1px solid #26262c; }
   .notes p { font-size: 13px; color: #8b8d94; line-height: 1.6; margin-bottom: 8px; }
@@ -34,7 +34,7 @@
 </head>
 <body>
   <div class="wrap">
-    <div class="logo"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+    <div class="logo"><svg viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#8b5cf6"/><rect x="7" y="13" width="5" height="10" rx="1.5" fill="#fff"/><rect x="13.5" y="8" width="5" height="15" rx="1.5" fill="#fff"/><rect x="20" y="12" width="5" height="11" rx="1.5" fill="#fff"/></svg></div>
     <h1>You're almost set up</h1>
     <p class="lead">
       Thanks for installing! This extension reads what you're playing on YouTube, but it
@@ -46,7 +46,7 @@
       <div class="num">1</div>
       <div>
         <h3>Get the desktop app and run it</h3>
-        <p>Download it, open it once, and a small red play icon appears in your system tray
+        <p>Download it, open it once, and a small violet icon appears in your system tray
           (near the clock). Right-click it to start it with Windows if you want.</p>
         <a class="btn" href="https://github.com/zMrKenn/youtubediscordrichpresence/releases/latest/download/youtube-rpc.exe" target="_blank" rel="noopener">Download the app</a>
       </div>

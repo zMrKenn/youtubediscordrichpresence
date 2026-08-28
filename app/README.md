@@ -47,7 +47,7 @@ cargo build --release
 ```
 
 You get a single self-contained `target/release/youtube-rpc.exe` (~4 MB, no runtime
-dependencies, no console window). Double-click it — a red play icon shows up in the tray.
+dependencies, no console window). Double-click it — a violet icon shows up in the tray.
 Right-click → **Start with Windows** to launch it at login.
 
 The Discord app id is baked into the binary, so the exe works on its own with no config

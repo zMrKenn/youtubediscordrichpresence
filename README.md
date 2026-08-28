@@ -60,7 +60,7 @@ None of it leaves your machine, and there's no account or bot anywhere.
 
 **2. Get the desktop app**
 
-- **[Download youtube-rpc.exe](https://github.com/zMrKenn/youtubediscordrichpresence/releases/latest/download/youtube-rpc.exe)** and run it — a red play icon lands in your tray
+- **[Download youtube-rpc.exe](https://github.com/zMrKenn/youtubediscordrichpresence/releases/latest/download/youtube-rpc.exe)** and run it — a violet icon lands in your tray
 - or build it from source: `cd app && cargo build --release`
 
 Then play something on YouTube. Right-click the tray icon → **Start with Windows** to launch

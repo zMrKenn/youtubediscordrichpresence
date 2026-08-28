@@ -6,8 +6,8 @@
   body { width: 300px; margin: 0; padding: 16px; background: #0f0f0f; color: #f1f1f1;
     font-family: "Segoe UI", system-ui, sans-serif; }
   .hd { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
-  .logo { width: 30px; height: 22px; background: #ff0000; border-radius: 5px; display: flex; align-items: center; justify-content: center; }
-  .logo svg { width: 12px; height: 12px; fill: #fff; margin-left: 1px; }
+  .logo { width: 28px; height: 28px; display: flex; }
+  .logo svg { width: 28px; height: 28px; }
   .hd .t { font-size: 14px; font-weight: 600; line-height: 1.2; }
   .hd .s { font-size: 11px; color: #aaa; }
   .status { display: flex; align-items: center; gap: 8px; background: #17171b; border-radius: 8px; padding: 10px 12px; margin-bottom: 10px; }
@@ -18,13 +18,13 @@
   #hint { font-size: 12px; color: #9a9ca3; line-height: 1.5; margin-bottom: 12px; min-height: 16px; }
   .btns { display: flex; flex-direction: column; gap: 8px; }
   button { font: inherit; font-size: 13px; font-weight: 600; padding: 8px 0; border-radius: 8px; cursor: pointer; border: 0; }
-  .primary { background: #ff2b2b; color: #fff; }
+  .primary { background: #8b5cf6; color: #fff; }
   .ghost { background: transparent; color: #e4e6ea; border: 1px solid #303036; }
 </style>
 </head>
 <body>
   <div class="hd">
-    <span class="logo"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
+    <span class="logo"><svg viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#8b5cf6"/><rect x="7" y="13" width="5" height="10" rx="1.5" fill="#fff"/><rect x="13.5" y="8" width="5" height="15" rx="1.5" fill="#fff"/><rect x="20" y="12" width="5" height="11" rx="1.5" fill="#fff"/></svg></span>
     <div><div class="t">YouTube Presence</div><div class="s">for Discord</div></div>
   </div>
   <div class="status"><span class="dot" id="dot"></span><span id="statusText">Checking...</span></div>

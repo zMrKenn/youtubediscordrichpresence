@@ -771,7 +771,7 @@ impl eframe::App for App {
                 set_flag(obfstr!("bgNotice"), true);
                 message_box(
                     obfstr!("YouTube RPC"),
-                    obfstr!("YouTube RPC is still running in the background and will keep updating your Discord activity.\n\nTo stop it completely, right-click the red icon in the tray (near the clock) and choose Quit."),
+                    obfstr!("YouTube RPC is still running in the background and will keep updating your Discord activity.\n\nTo stop it completely, right-click the violet icon in the tray (near the clock) and choose Quit."),
                 );
             }
         }
@@ -862,17 +862,21 @@ fn draw_now_playing(
         .show(ui, |ui| {
             let w = ui.available_width();
             if !snap.has_song {
-                ui.allocate_ui_with_layout(
-                    egui::vec2(w, 150.0),
-                    egui::Layout::centered_and_justified(egui::Direction::TopDown),
-                    |ui| {
-                        ui.vertical_centered(|ui| {
-                            ui.label(egui::RichText::new(obfstr!("Nothing playing")).size(14.0).color(MUTED));
-                            ui.label(
-                                egui::RichText::new(obfstr!("Play something on YouTube")).size(11.0).color(MUTED),
-                            );
-                        });
-                    },
+                let (rect, _) = ui.allocate_exact_size(egui::vec2(w, 132.0), Sense::hover());
+                let p = ui.painter();
+                p.text(
+                    rect.center() - egui::vec2(0.0, 9.0),
+                    egui::Align2::CENTER_CENTER,
+                    obfstr!("Nothing playing"),
+                    egui::FontId::proportional(15.0),
+                    TEXT,
+                );
+                p.text(
+                    rect.center() + egui::vec2(0.0, 13.0),
+                    egui::Align2::CENTER_CENTER,
+                    obfstr!("Play something on YouTube"),
+                    egui::FontId::proportional(12.0),
+                    MUTED,
                 );
                 return;
             }
