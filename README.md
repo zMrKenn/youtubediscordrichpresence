@@ -15,7 +15,7 @@
 <br/><br/>
 
 <a href="https://github.com/zMrKenn/youtubediscordrichpresence/releases/latest"><img src="https://img.shields.io/badge/Download%20the%20app-.exe-0D1117?style=for-the-badge&logo=github&logoColor=A78BFA&labelColor=0D1117&color=A78BFA" alt="Download the app"/></a>
-<a href="https://chromewebstore.google.com/detail/dmilhomifdpkfmeelmcnkdphhclcjagn"><img src="https://img.shields.io/badge/Chrome%20Web%20Store-in%20review-0D1117?style=for-the-badge&logo=googlechrome&logoColor=A78BFA&labelColor=0D1117&color=F59E0B" alt="Chrome Web Store"/></a>
+<a href="https://chromewebstore.google.com/detail/youtube-presence-for-disc/jfagigfpclebabdakeefbfhckefgplbp"><img src="https://img.shields.io/badge/Chrome%20Web%20Store-install-0D1117?style=for-the-badge&logo=googlechrome&logoColor=A78BFA&labelColor=0D1117&color=22C55E" alt="Chrome Web Store"/></a>
 
 </div>
 
@@ -55,7 +55,7 @@ None of it leaves your machine, and there's no account or bot anywhere.
 
 **1. Get the browser extension**
 
-- Chrome Web Store: **[install here](https://chromewebstore.google.com/detail/dmilhomifdpkfmeelmcnkdphhclcjagn)** — *currently in review, coming soon*
+- Chrome Web Store: **[install here](https://chromewebstore.google.com/detail/youtube-presence-for-disc/jfagigfpclebabdakeefbfhckefgplbp)**
 - or load it unpacked: `chrome://extensions` → Developer mode → **Load unpacked** → pick `./extension`
 
 **2. Get the desktop app**
