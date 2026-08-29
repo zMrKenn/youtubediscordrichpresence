@@ -1,3 +1,16 @@
+// inject inject.js into the page's own world so it can reach YouTube's player
+// (Firefox doesn't support content_scripts with world: "MAIN", so we do it by hand)
+(() => {
+	try {
+		const s = document.createElement('script');
+		s.src = chrome.runtime.getURL('inject.js');
+		s.onload = () => s.remove();
+		(document.head || document.documentElement).appendChild(s);
+	} catch (e) {
+		console.warn('[yt-rpc] failed to inject player bridge:', e);
+	}
+})();
+
 // cleans up the player data from inject.js and forwards it to the background worker.
 // sends only on change, plus a heartbeat.
 (() => {

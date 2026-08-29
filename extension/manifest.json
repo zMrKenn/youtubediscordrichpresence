@@ -30,18 +30,24 @@
 				"*://m.youtube.com/*",
 				"*://music.youtube.com/*"
 			],
-			"js": ["inject.js"],
-			"world": "MAIN",
+			"js": ["content.js"],
 			"run_at": "document_start"
-		},
+		}
+	],
+	"web_accessible_resources": [
 		{
+			"resources": ["inject.js"],
 			"matches": [
 				"*://www.youtube.com/*",
 				"*://m.youtube.com/*",
 				"*://music.youtube.com/*"
-			],
-			"js": ["content.js"],
-			"run_at": "document_idle"
+			]
 		}
-	]
+	],
+	"browser_specific_settings": {
+		"gecko": {
+			"id": "youtube-presence@keen.pub",
+			"strict_min_version": "121.0"
+		}
+	}
 }
