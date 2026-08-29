@@ -6,8 +6,9 @@ app/target/
 **/.env
 .oauth-token.json
 
-# packaged extension (rebuild it when publishing)
+# packaged extensions (rebuild them with build-extensions.ps1 when publishing)
 extension.zip
+extension-firefox.zip
 
 # OS junk
 Thumbs.db

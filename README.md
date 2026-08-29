@@ -56,7 +56,7 @@ None of it leaves your machine, and there's no account or bot anywhere.
 **1. Get the browser extension**
 
 - **Chrome, Edge, Brave, Opera, Vivaldi** — install from the [Chrome Web Store](https://chromewebstore.google.com/detail/youtube-presence-for-disc/jfagigfpclebabdakeefbfhckefgplbp). On Edge you'll be asked to *Allow extensions from other stores* the first time.
-- **Firefox 121+** — load it unpacked for now: open `about:debugging#/runtime/this-firefox`, click **Load Temporary Add-on**, and pick `extension/manifest.json`. An addons.mozilla.org listing is on the way.
+- **Firefox** — load it unpacked for now: open `about:debugging#/runtime/this-firefox`, click **Load Temporary Add-on**, and pick `extension/manifest-firefox.json`. An addons.mozilla.org listing is on the way.
 - Or on any Chromium browser, load it unpacked: `chrome://extensions` → Developer mode → **Load unpacked** → pick `./extension`.
 
 **2. Get the desktop app**
