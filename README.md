@@ -16,6 +16,7 @@
 
 <a href="https://github.com/zMrKenn/youtubediscordrichpresence/releases/latest"><img src="https://img.shields.io/badge/Download%20the%20app-.exe-0D1117?style=for-the-badge&logo=github&logoColor=A78BFA&labelColor=0D1117&color=A78BFA" alt="Download the app"/></a>
 <a href="https://chromewebstore.google.com/detail/youtube-presence-for-disc/jfagigfpclebabdakeefbfhckefgplbp"><img src="https://img.shields.io/badge/Chrome%20Web%20Store-install-0D1117?style=for-the-badge&logo=googlechrome&logoColor=A78BFA&labelColor=0D1117&color=22C55E" alt="Chrome Web Store"/></a>
+<a href="https://addons.mozilla.org/en-US/firefox/addon/youtube-presence-for-discord/"><img src="https://img.shields.io/badge/Firefox%20Add--ons-under%20review-0D1117?style=for-the-badge&logo=firefoxbrowser&logoColor=A78BFA&labelColor=0D1117&color=F59E0B" alt="Firefox Add-ons"/></a>
 
 </div>
 
@@ -56,7 +57,7 @@ None of it leaves your machine, and there's no account or bot anywhere.
 **1. Get the browser extension**
 
 - **Chrome, Edge, Brave, Opera, Vivaldi** — install from the [Chrome Web Store](https://chromewebstore.google.com/detail/youtube-presence-for-disc/jfagigfpclebabdakeefbfhckefgplbp). On Edge you'll be asked to *Allow extensions from other stores* the first time.
-- **Firefox** — load it unpacked for now: open `about:debugging#/runtime/this-firefox`, click **Load Temporary Add-on**, and pick `extension/manifest-firefox.json`. An addons.mozilla.org listing is on the way.
+- **Firefox** — [addons.mozilla.org listing](https://addons.mozilla.org/en-US/firefox/addon/youtube-presence-for-discord/) is *under review*. Until it's approved: open `about:debugging#/runtime/this-firefox`, click **Load Temporary Add-on**, and pick `extension/manifest-firefox.json`.
 - Or on any Chromium browser, load it unpacked: `chrome://extensions` → Developer mode → **Load unpacked** → pick `./extension`.
 
 **2. Get the desktop app**
