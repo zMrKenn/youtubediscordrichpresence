@@ -57,7 +57,7 @@ None of it leaves your machine, and there's no account or bot anywhere.
 **1. Get the browser extension**
 
 - **Chrome, Edge, Brave, Opera, Vivaldi** — install from the [Chrome Web Store](https://chromewebstore.google.com/detail/youtube-presence-for-disc/jfagigfpclebabdakeefbfhckefgplbp). On Edge you'll be asked to *Allow extensions from other stores* the first time.
-- **Firefox** — [addons.mozilla.org listing](https://addons.mozilla.org/en-US/firefox/addon/youtube-presence-for-discord/) is *under review*. Until it's approved: open `about:debugging#/runtime/this-firefox`, click **Load Temporary Add-on**, and pick `extension/manifest-firefox.json`.
+- **Firefox** — install from [Firefox Add-ons](https://addons.mozilla.org/en-US/firefox/addon/youtube-presence-for-discord/).
 - Or on any Chromium browser, load it unpacked: `chrome://extensions` → Developer mode → **Load unpacked** → pick `./extension`.
 
 **2. Get the desktop app**
