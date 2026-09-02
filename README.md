@@ -16,7 +16,7 @@
 
 <a href="https://github.com/zMrKenn/youtubediscordrichpresence/releases/latest"><img src="https://img.shields.io/badge/Download%20the%20app-.exe-0D1117?style=for-the-badge&logo=github&logoColor=A78BFA&labelColor=0D1117&color=A78BFA" alt="Download the app"/></a>
 <a href="https://chromewebstore.google.com/detail/youtube-presence-for-disc/jfagigfpclebabdakeefbfhckefgplbp"><img src="https://img.shields.io/badge/Chrome%20Web%20Store-install-0D1117?style=for-the-badge&logo=googlechrome&logoColor=A78BFA&labelColor=0D1117&color=22C55E" alt="Chrome Web Store"/></a>
-<a href="https://addons.mozilla.org/en-US/firefox/addon/youtube-presence-for-discord/"><img src="https://img.shields.io/badge/Firefox%20Add--ons-under%20review-0D1117?style=for-the-badge&logo=firefoxbrowser&logoColor=A78BFA&labelColor=0D1117&color=F59E0B" alt="Firefox Add-ons"/></a>
+<a href="https://addons.mozilla.org/en-US/firefox/addon/youtube-presence-for-discord/"><img src="https://img.shields.io/badge/Firefox%20Add--ons-install-0D1117?style=for-the-badge&logo=firefoxbrowser&logoColor=A78BFA&labelColor=0D1117&color=22C55E" alt="Firefox Add-ons"/></a>
 
 </div>
 
